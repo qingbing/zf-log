@@ -31,7 +31,7 @@ $logger->warning('I am {name}', [
 # 使用自定义的Flusher和Formatter
 ```php
 // 定义Formatter
-$formatter = new \Zf\Log\Supports\Abstracts\AFormatter();
+$formatter = new \Zf\Log\Supports\Formatter();
 
 // 定义持久化类
 $flusher = new \Zf\Log\Supports\Flusher($formatter);
