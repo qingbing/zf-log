@@ -11,9 +11,11 @@ namespace Zf\Log;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
 use Zf\Helper\Abstracts\Component;
+use Zf\Helper\Exceptions\Exception;
 use Zf\Helper\Format;
 use Zf\Helper\ZList;
-use Zf\Log\Supports\Flusher;
+use Zf\Log\Supports\Abstracts\AFlusher;
+use Zf\Log\Supports\FileFlusher;
 use Zf\Log\Supports\Formatter;
 
 /**
@@ -76,7 +78,7 @@ class Logger extends Component
     /**
      * @describe    属性赋值后执行函数
      *
-     * @throws \Zf\Helper\Exceptions\Exception
+     * @throws Exception
      * @throws \Zf\Helper\Exceptions\ParameterException
      */
     public function init()
@@ -112,7 +114,7 @@ class Logger extends Component
      * @param string $message
      * @param array $context
      *
-     * @throws \Zf\Helper\Exceptions\Exception
+     * @throws Exception
      */
     public function log(string $level, string $message, array $context = [])
     {
@@ -126,6 +128,8 @@ class Logger extends Component
 
     /**
      * @describe    冲刷消息
+     *
+     * @throws Exception
      */
     public function flush()
     {
@@ -133,14 +137,21 @@ class Logger extends Component
             return;
         }
         if (null === $this->flusher) {
-            $this->flusher = new Flusher(new Formatter());
+            $this->flusher = new FileFlusher(new Formatter());
+        } else if (!$this->flusher instanceof AFlusher) {
+            throw new Exception(interpolate('{logger} 的 flusher 必须继承 {flusher}', [
+                'logger' => get_class($this),
+                'flusher' => AFlusher::class,
+            ]));
         }
         $this->flusher->setLogger($this);
         $this->flusher->flush();
     }
 
     /**
-     * @throws \Exception
+     * 魔术方法：析构函数
+     *
+     * @throws Exception
      */
     public function __destruct()
     {

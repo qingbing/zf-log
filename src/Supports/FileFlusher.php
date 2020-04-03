@@ -23,10 +23,10 @@ defined("ZF_RUNTIME") or define("ZF_RUNTIME", dirname(realpath('.')) . '/runtime
  * @author      qingbing<780042175@qq.com>
  * @describe    默认日志冲刷
  *
- * Class Flusher
+ * Class FileFlusher
  * @package Zf\Log\Supports
  */
-class Flusher extends AFlusher
+class FileFlusher extends AFlusher
 {
     /**
      * @describe    日志持久化目录
@@ -39,7 +39,7 @@ class Flusher extends AFlusher
      *
      * @var int
      */
-    public $fileMaxSize = 1000000;
+    public $maxSize = 2000000;
 
     /**
      * @describe    清理，持久化日志队列
@@ -72,7 +72,7 @@ class Flusher extends AFlusher
         }
         // 真实文件存放地址
         $file = $logPath . '/' . date('Ymd') . '.log';
-        if (file_exists($file) && filesize($file) > $this->fileMaxSize) {
+        if (file_exists($file) && filesize($file) > $this->maxSize) {
             $newFile = $logPath . '/' . date('Ymd_His') . '.log';
             @rename($file, $newFile);
         }

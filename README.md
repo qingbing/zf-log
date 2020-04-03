@@ -34,8 +34,8 @@ $logger->warning('I am {name}', [
 $formatter = new \Zf\Log\Supports\Formatter();
 
 // 定义持久化类
-$flusher = new \Zf\Log\Supports\Flusher($formatter);
-$flusher->fileMaxSize = 1000;
+$flusher = new \Zf\Log\Supports\FileFlusher($formatter);
+$flusher->maxSize = 1000;
 
 // 实例化 $logger
 $logger = Object::create([
