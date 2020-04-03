@@ -18,7 +18,7 @@
   "require": {
     "php": ">=7.0.0",
     "psr/log": "~1.0",
-    "qingbing/zf-helper": ">=1.0.1"
+    "qingbing/zf-helper": "^1.0.1"
   },
   "require-dev": {
     "qingbing/debug-bootstrap": "dev-master"
