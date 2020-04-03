@@ -1,0 +1,41 @@
+{
+  "name": "qingbing/zf-log",
+  "description": "日志组件，日志的相关操作",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "php",
+    "zf",
+    "log"
+  ],
+  "homepage": "http://www.phpcorner.net",
+  "authors": [
+    {
+      "name": "qingbing",
+      "email": "780042175@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "psr/log": "~1.0",
+    "qingbing/zf-helper": ">=1.0.1"
+  },
+  "require-dev": {
+    "qingbing/debug-bootstrap": "dev-master"
+  },
+  "suggest": {
+    "qingbing/zf-conf": "建议使用zf-conf来管理配置信息"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zf\\Log\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\Debug\\": "test/debug",
+      "Test\\Commands\\": "test/src/command",
+      "Test\\Web\\": "test/src/web"
+    }
+  }
+}
