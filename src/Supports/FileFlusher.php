@@ -10,6 +10,7 @@ namespace Zf\Log\Supports;
 
 use Zf\Helper\Business\Context;
 use Zf\Helper\Business\CryptJson;
+use Zf\Helper\Exceptions\Exception;
 use Zf\Helper\File;
 use Zf\Helper\Format;
 use Zf\Log\Supports\Abstracts\AFlusher;
@@ -45,6 +46,8 @@ class FileFlusher extends AFlusher
      * @describe    清理，持久化日志队列
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function flush()
     {
@@ -66,9 +69,16 @@ class FileFlusher extends AFlusher
             return;
         }
         // 确保日志文件存在
-        $logPath = ZF_RUNTIME . '/' . $logger->channel;
-        if (!is_dir($logPath)) {
-            File::mkdir($logPath, 0777, false);
+        if ($this->logPath) {
+            if (!is_dir($this->logPath)) {
+                throw new Exception("指定的日志目录不存在");
+            }
+            $logPath = realpath($this->logPath);
+        } else {
+            $logPath = ZF_RUNTIME . '/' . $logger->channel;
+            if (!is_dir($logPath)) {
+                File::mkdir($logPath, 0777, false);
+            }
         }
         // 真实文件存放地址
         $file = $logPath . '/' . date('Ymd') . '.log';
