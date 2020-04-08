@@ -13,6 +13,7 @@ use Zf\Helper\Business\CryptJson;
 use Zf\Helper\Exceptions\Exception;
 use Zf\Helper\File;
 use Zf\Helper\Format;
+use Zf\Log\Logger;
 use Zf\Log\Supports\Abstracts\AFlusher;
 
 /**
@@ -30,6 +31,20 @@ defined("ZF_RUNTIME") or define("ZF_RUNTIME", dirname(realpath('.')) . '/runtime
 class FileFlusher extends AFlusher
 {
     /**
+     * @describe    接受处理的消息类型，如果不设置，表示全部结束处理
+     *
+     * @var array
+     */
+    public $acceptTypes = [
+        Logger::EMERGENCY,
+        Logger::ALERT,
+        Logger::CRITICAL,
+        Logger::ERROR,
+        Logger::WARNING,
+        Logger::NOTICE,
+        Logger::INFO,
+    ];
+    /**
      * @describe    日志持久化目录
      *
      * @var string
@@ -43,31 +58,13 @@ class FileFlusher extends AFlusher
     public $maxSize = 2000000;
 
     /**
-     * @describe    清理，持久化日志队列
+     * @describe    清理，持久化
      *
-     * @return void
-     *
+     * @param array $recordList
      * @throws Exception
      */
-    public function flush()
+    protected function flushData(array $recordList)
     {
-        $logger = $this->logger;
-        $flushData = [];
-        if (is_array($logger->acceptTypes)) {
-            foreach ($logger->getRecordList() as $item) {
-                if (!in_array($item['level'], $logger->acceptTypes)) {
-                    continue;
-                }
-                $flushData[] = $this->formatter->format($item);
-            }
-        } else {
-            foreach ($logger->getRecordList() as $item) {
-                $flushData[] = $this->formatter->format($item);
-            }
-        }
-        if (0 === count($flushData)) {
-            return;
-        }
         // 确保日志文件存在
         if ($this->logPath) {
             if (!is_dir($this->logPath)) {
@@ -75,7 +72,7 @@ class FileFlusher extends AFlusher
             }
             $logPath = realpath($this->logPath);
         } else {
-            $logPath = ZF_RUNTIME . '/' . $logger->channel;
+            $logPath = ZF_RUNTIME . '/' . $this->logger->channel;
             if (!is_dir($logPath)) {
                 File::mkdir($logPath, 0777, false);
             }
@@ -89,10 +86,10 @@ class FileFlusher extends AFlusher
         // 准备日志信息
         $data = [
             'logId' => Context::getLogId(),
-            'channel' => $logger->channel,
-            'starttime' => $logger->getStartTime(),
+            'channel' => $this->logger->channel,
+            'starttime' => $this->logger->getStartTime(),
             'endtime' => Format::microDateTime(),
-            'info' => $flushData,
+            'info' => $recordList,
             'refer' => Context::urlReferrer(),
         ];
         // 日志写入文件

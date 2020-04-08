@@ -9,7 +9,7 @@ namespace Test\Web;
 
 
 use DebugBootstrap\Abstracts\Tester;
-use Test\Debug\AppDemo;
+use Test\Debug\TLoggerTester;
 
 /**
  * @author      qingbing<780042175@qq.com>
@@ -18,29 +18,9 @@ use Test\Debug\AppDemo;
  * Class LogTester
  * @package Test\Web
  */
-class LogTester extends Tester
+class LoggerTester extends Tester
 {
-
-    /**
-     * @describe    执行函数
-     *
-     * @throws \ReflectionException
-     * @throws \Zf\Helper\Exceptions\ClassException
-     */
-    public function run()
-    {
-        $logger = AppDemo::log();
-
-
-        $logger->alert('xxx', [
-            'param' => 'xxx',
-            'xx' => 'xxx',
-        ]);
-
-        $logger->warning('I am {name}', [
-            'name' => 'qingbing',
-        ]);
-    }
+    use TLoggerTester;
 
     public function send($url, $header, $content)
     {

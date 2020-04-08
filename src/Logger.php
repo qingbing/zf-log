@@ -47,16 +47,9 @@ class Logger extends Component
     /**
      * @describe    消息格式化
      *
-     * @var \Zf\Log\Supports\Abstracts\AFlusher
+     * @var \Zf\Log\Supports\Abstracts\AFlusher[]
      */
-    public $flusher;
-    /**
-     * @describe    消息格式化
-     *
-     * @var array
-     */
-    public $acceptTypes;
-
+    private $_flushers;
     /**
      * @describe    日志记录列表
      *
@@ -79,7 +72,6 @@ class Logger extends Component
      * @describe    属性赋值后执行函数
      *
      * @throws Exception
-     * @throws \Zf\Helper\Exceptions\ParameterException
      */
     public function init()
     {
@@ -127,25 +119,80 @@ class Logger extends Component
     }
 
     /**
+     * @describe    用户没有设置消费处理机时，默认使用文件方式
+     *
+     * @throws Exception
+     */
+    protected function defaultFlusher()
+    {
+        $flusher = new FileFlusher(new Formatter());
+        $this->getFlushers()->push($flusher);
+    }
+
+    /**
+     * @describe    获取日志处理机
+     *
+     * @return ZList|AFlusher[]
+     * @throws Exception
+     * @throws \Zf\Helper\Exceptions\ParameterException
+     */
+    public function getFlushers()
+    {
+        if (null === $this->_flushers) {
+            $this->_flushers = new ZList();
+        }
+        return $this->_flushers;
+    }
+
+    /**
+     * @describe    添加一个消息处理机
+     *
+     * @param AFlusher $flusher
+     * @param bool $append
+     * @throws Exception
+     */
+    public function addFlusher(AFlusher $flusher, $append = true)
+    {
+        if (!$this->getFlushers()->contains($flusher)) {
+            if ($append) {
+                $this->getFlushers()->push($flusher);
+            } else {
+                $this->getFlushers()->unshift($flusher);
+            }
+        }
+    }
+
+    /**
+     * @describe    移除一个消息处理机
+     *
+     * @param AFlusher $flusher
+     * @throws Exception
+     * @throws \Zf\Helper\Exceptions\ParameterException
+     */
+    public function removeFlusher(AFlusher $flusher)
+    {
+        $this->getFlushers()->remove($flusher);
+    }
+
+    /**
      * @describe    冲刷消息
      *
      * @throws Exception
      */
     public function flush()
     {
-        if (0 === $this->getRecordList()->count()) {
+        $recordList = $this->getRecordList();
+        // 没有消息，放回终止
+        if (0 === count($recordList)) {
             return;
         }
-        if (null === $this->flusher) {
-            $this->flusher = new FileFlusher(new Formatter());
-        } else if (!$this->flusher instanceof AFlusher) {
-            throw new Exception(interpolate('{logger} 的 flusher 必须继承 {flusher}', [
-                'logger' => get_class($this),
-                'flusher' => AFlusher::class,
-            ]));
+        // 没有设置日志消息处理机时创建一个默认的
+        if (0 === count($this->getFlushers())) {
+            $this->defaultFlusher();
         }
-        $this->flusher->setLogger($this);
-        $this->flusher->flush();
+        foreach ($this->getFlushers() as $flusher) {
+            $flusher->flush($this);
+        }
     }
 
     /**
