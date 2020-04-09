@@ -9,11 +9,11 @@ namespace Test\Debug;
 
 
 use Zf\Helper\Object;
+use Zf\Log\Abstracts\AFormatter;
+use Zf\Log\Flushers\FileFlusher;
+use Zf\Log\Flushers\StreamFlusher;
+use Zf\Log\Formatters\Formatter;
 use Zf\Log\Logger;
-use Zf\Log\Supports\Abstracts\AFormatter;
-use Zf\Log\Supports\FileFlusher;
-use Zf\Log\Supports\Formatter;
-use Zf\Log\Supports\StreamFlusher;
 
 trait TLoggerTester
 {

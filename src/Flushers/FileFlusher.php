@@ -5,7 +5,7 @@
  * @copyright   Chengdu Qb Technology Co., Ltd.
  */
 
-namespace Zf\Log\Supports;
+namespace Zf\Log\Flushers;
 
 
 use Zf\Helper\Business\Context;
@@ -13,8 +13,8 @@ use Zf\Helper\Business\CryptJson;
 use Zf\Helper\Exceptions\Exception;
 use Zf\Helper\File;
 use Zf\Helper\Format;
+use Zf\Log\Abstracts\AFlusher;
 use Zf\Log\Logger;
-use Zf\Log\Supports\Abstracts\AFlusher;
 
 /**
  * 定义缓存目录

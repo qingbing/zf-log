@@ -5,12 +5,12 @@
  * @copyright   Chengdu Qb Technology Co., Ltd.
  */
 
-namespace Zf\Log\Supports;
+namespace Zf\Log\Flushers;
 
 
 use Zf\Helper\Business\Context;
 use Zf\Helper\Format;
-use Zf\Log\Supports\Abstracts\AFlusher;
+use Zf\Log\Abstracts\AFlusher;
 
 class StreamFlusher extends AFlusher
 {

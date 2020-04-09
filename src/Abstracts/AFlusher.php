@@ -5,7 +5,7 @@
  * @copyright   Chengdu Qb Technology Co., Ltd.
  */
 
-namespace Zf\Log\Supports\Abstracts;
+namespace Zf\Log\Abstracts;
 
 
 use Zf\Log\Logger;

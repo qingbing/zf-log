@@ -5,19 +5,16 @@
  * @copyright   Chengdu Qb Technology Co., Ltd.
  */
 
-namespace Zf\Log\Supports;
-
-
-use Zf\Log\Supports\Abstracts\AFormatter;
+namespace Zf\Log\Abstracts;
 
 /**
  * @author      qingbing<780042175@qq.com>
- * @describe    默认日志记录格式化处理
+ * @describe    日志记录格式化处理
  *
- * Class Formatter
- * @package Zf\Log\Supports
+ * Class AFormatter
+ * @package Zf\Log\Supports\Abstracts
  */
-class Formatter extends AFormatter
+abstract class AFormatter
 {
     /**
      * @describe    格式化一个日志记录
@@ -26,8 +23,5 @@ class Formatter extends AFormatter
      *
      * @return mixed
      */
-    public function format(array $record)
-    {
-        return $record;
-    }
+    abstract public function format(array $record);
 }

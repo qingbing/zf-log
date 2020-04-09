@@ -14,8 +14,8 @@ use Zf\Helper\Abstracts\Component;
 use Zf\Helper\Exceptions\Exception;
 use Zf\Helper\Format;
 use Zf\Helper\ZList;
-use Zf\Log\Supports\Abstracts\AFlusher;
-use Zf\Log\Supports\FileFlusher;
+use Zf\Log\Abstracts\AFlusher;
+use Zf\Log\Flushers\FileFlusher;
 use Zf\Log\Supports\Formatter;
 
 /**
@@ -47,7 +47,7 @@ class Logger extends Component
     /**
      * @describe    消息格式化
      *
-     * @var \Zf\Log\Supports\Abstracts\AFlusher[]
+     * @var AFlusher[]
      */
     private $_flushers;
     /**
