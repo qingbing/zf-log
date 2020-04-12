@@ -16,7 +16,7 @@ use Zf\Helper\Format;
 use Zf\Helper\ZList;
 use Zf\Log\Abstracts\AFlusher;
 use Zf\Log\Flushers\FileFlusher;
-use Zf\Log\Supports\Formatter;
+use Zf\Log\Formatters\Formatter;
 
 /**
  * @author      qingbing<780042175@qq.com>
